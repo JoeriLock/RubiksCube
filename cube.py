@@ -56,7 +56,6 @@ class Cube:
         )
 
     rotate = (0, 0, 0, 0)
-    position = (0,0,0)
     cubePos = [0,0,0]
 
     # test(*numpy.multiply(2,[1,2,3]))
@@ -90,7 +89,7 @@ class Cube:
     def setRotate(self,direction, x, y, z):
         if(x == 1):
             self.cubePos[2],self.cubePos[1] = self.cubePos[1],self.cubePos[2]
-            self.rotate = (direction*90, x, y, z)
+            self.rotate = (direction*90, x+1, y, z)
         #(-1,-1,1),(-1,0,-1),(-1,1,-1)
         #(-1-1,-1),(-1,-1,0),(-1,-1,1)
         #(-1,-1,0)

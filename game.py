@@ -60,7 +60,13 @@ class Game:
         phi = 0.02 * glutGet(GLUT_ELAPSED_TIME)
 
         glRotatef(33, *self.getDirection()); # Changes view on key press
-        self.cubeHandler.getTestCube().setRotate(0.2,1,0,0)
+        for cube in self.cubeHandler.getX(0):
+            cube.setRotate(1,1,0,0)
+        for cube in self.cubeHandler.getY(0):
+             cube.setRotate(1,1,0,0)
+        # for cube in self.cubeHandler.getX(-1):
+        #     cube.setRotate(1,1,0,0)
+        #self.cubeHandler.getTestCube().setRotate(0.2,1,0,0)
         for cube in self.cubes:
             cube.draw()
 
