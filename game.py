@@ -8,6 +8,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from cube import Cube
+#from positionHandler import PositionHandler
 import time
 import numpy
 from copy import deepcopy
@@ -50,10 +51,7 @@ class Game:
     #     glutMouseFunc(self.mouseAction)
     #     glutMainLoop()
     def __init__(self):
-        cube = Cube()
-        self.cubes.append(cube)
-        cube = Cube()
-        self.cubes.append(cube)
+        self.createCubes()
         # basic config to create window
         glutInit()
         glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_DEPTH)
@@ -69,6 +67,15 @@ class Game:
         glutMouseFunc(self.mouseAction)
         glutMainLoop()
 
+
+    def createCubes(self):
+        for depth in range(-1,2):
+            for ver in range(-1,2):
+                for hor in range(-1,2):
+                    cube = Cube(hor,ver,depth)
+                    self.cubes.append(cube)
+
+
     # Draw all that is need
     def showScreen(self):
         #print("game".self.controls.getInput())
@@ -80,21 +87,22 @@ class Game:
 
         glTranslate(0, 0, -8) # translatie (beweeg een beetje naar achter)
 
-        #glRotatef(phi, *self.getDirection()); # rotates whole object
+        glRotatef(33, *self.getDirection()); # rotates whole object
         # draws rubik
         #glTranslate(0.5,0.5, 0)
-        self.cubes[0].draw(0,0,0)
-        self.cubes[1].setRotate(phi,0, 0, 1)
-        self.cubes[1].draw(3,0,0)
-        #self.cubes[0].rotate()
-        # for depth in range(-1,2):
-        #     for ver in range(-1,2):
-        #         for hor in range(-1,2):
-        #             cube = Cube()
-        #             cube.draw(hor * self.cubeDist,ver * self.cubeDist,depth * self.cubeDist)
-        #             self.cubes.append(cube)
+        #self.cubes[0].setRotate(phi,0, 0, 1)
+
+        #PositionHandler.rotateSide()w
+        for i in range(2,27,3):
+            self.cubes[i].setRotate(1,1,0,0)
+        #for i in range(18,27):
+    #        self.cubes[i].setRotate(90,0,0,1)
+        for cube in self.cubes:
+            cube.draw()
 
         glutSwapBuffers()
+
+
 
 
     def mouseAction(self, *args):
@@ -110,7 +118,7 @@ class Game:
             self.keyCache = args[0]
 
     def getDirection(self):
-        if(self.keyCache == ''):
+        if(self.keyCache == ' '):
             return (0,0,0)
 
         if self.keyCache == b'w':
@@ -121,5 +129,7 @@ class Game:
             return (0,1,0)
         elif self.keyCache == b's':
             return (-1,0,0)
+
+        return (0,0,0)
 
 Game()

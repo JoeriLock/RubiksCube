@@ -7,6 +7,8 @@ import numpy
 
 
 class Cube:
+
+    cubeDist = 2.2
     # vertices = corners (8 tot)
     # (x, y, z)
     verticies = (
@@ -55,9 +57,16 @@ class Cube:
 
     rotate = (0, 0, 0, 0)
     position = (0,0,0)
+    cubePos = (0,0,0)
 
+    # test(*numpy.multiply(2,[1,2,3]))
+    # def test(a,b,c):
+    #     return a + b +c
 
-    def draw(self, x, y ,z):
+    def __init__(self, x, y, z):
+        self.position = numpy.multiply(self.cubeDist,[x, y ,z])
+
+    def draw(self):
         glPushMatrix()
         glRotate(*self.rotate)
         glBegin(GL_QUADS)
@@ -66,16 +75,16 @@ class Cube:
             glColor3fv(self.colors[i])
             i+=1
             for vertex in surface:
-                glVertex3fv(numpy.add((x,y,z),self.verticies[vertex]))
+                glVertex3fv(numpy.add(self.position,self.verticies[vertex]))
         glEnd()
 
         glBegin(GL_LINES)
         glColor3fv((0,0,0))
         for edge in self.edges:
             for vertex in edge:
-                glVertex3fv(numpy.add((x,y,z),self.verticies[vertex]))
+                glVertex3fv(numpy.add(self.position,self.verticies[vertex]))
         glEnd()
         glPopMatrix()
 
-    def setRotate(self,_rotate, x, y, z):
-        self.rotate = (_rotate, x, y, z)
+    def setRotate(self,direction, x, y, z):
+        self.rotate = (direction*90, x, y, z)
