@@ -88,7 +88,6 @@ class Cube:
         glPopMatrix()
 
     def setRotate(self,direction, x, y, z):
-        print(self.cubePos)
         if(x == 1):
             self.cubePos[2],self.cubePos[1] = self.cubePos[1],self.cubePos[2]
             self.rotate = (direction*90, x, y, z)
