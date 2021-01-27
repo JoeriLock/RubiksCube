@@ -33,11 +33,6 @@ class Game:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnable(GL_DEPTH_TEST)
         glLineWidth(5)
-        glViewport(0, -0, 500, 500) #Draw area (x,y, width, height)
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear screen
-        glLoadIdentity() # wis de huidige matrix
-        glFrustum(-1, 1, -1.0, 1.0,1, 20) # 3d matrix warin in dingen kan neer zetten
-        glTranslate(0, 0, -8) # translatie (beweeg een beetje naar achter)
         # what to draw each frame
         #glutDisplayFunc(self.showScreen) #init drawing
         glutIdleFunc(self.showScreen)
@@ -58,15 +53,21 @@ class Game:
     # Draw all that is need
     def showScreen(self):
         phi = 0.02 * glutGet(GLUT_ELAPSED_TIME)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear screen
+        glLoadIdentity() # wis de huidige matrix
+        glViewport(0, -0, 500, 500) #Draw area (x,y, width, height)
+        glFrustum(-1, 1, -1.0, 1.0,1, 20) # 3d matrix warin in dingen kan neer zetten
+        glTranslate(0, 0, -8) # translatie (beweeg een beetje naar achter)
+
 
         glRotatef(33, *self.getDirection()); # Changes view on key press
-        for cube in self.cubeHandler.getX(0):
-            cube.setRotate(1,1,0,0)
         for cube in self.cubeHandler.getY(0):
-             cube.setRotate(1,1,0,0)
+            cube.setRotate(1,1,0,0)
+        # for cube in self.cubeHandler.getY(0):
+        #   cube.setRotate(1,1,0,0)
         # for cube in self.cubeHandler.getX(-1):
         #     cube.setRotate(1,1,0,0)
-        #self.cubeHandler.getTestCube().setRotate(0.2,1,0,0)
+        #self.cubeHandler.getTestCube().setRotate(0.2,0,1,0)
         for cube in self.cubes:
             cube.draw()
 
