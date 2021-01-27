@@ -21,7 +21,7 @@ class Game:
     controls = ""
 
     SPEED = 0.05
-    cubeDist = 2.2
+
     keyCache = "";
     cubes = []
 
@@ -93,8 +93,8 @@ class Game:
         #self.cubes[0].setRotate(phi,0, 0, 1)
 
         #PositionHandler.rotateSide()w
-        for i in range(2,27,3):
-            self.cubes[i].setRotate(1,1,0,0)
+        #for i in range(2,27,3):
+        self.cubes[18].setRotate(0.2,1,0,0)
         #for i in range(18,27):
     #        self.cubes[i].setRotate(90,0,0,1)
         for cube in self.cubes:
@@ -118,6 +118,7 @@ class Game:
             self.keyCache = args[0]
 
     def getDirection(self):
+
         if(self.keyCache == ' '):
             return (0,0,0)
 
@@ -129,7 +130,9 @@ class Game:
             return (0,1,0)
         elif self.keyCache == b's':
             return (-1,0,0)
-
+        elif self.keyCache == b'1':
+            print(self.cubes[18].cubePos)
+            self.keyCache = ''
         return (0,0,0)
 
 Game()

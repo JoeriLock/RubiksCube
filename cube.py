@@ -57,7 +57,7 @@ class Cube:
 
     rotate = (0, 0, 0, 0)
     position = (0,0,0)
-    cubePos = (0,0,0)
+    cubePos = [0,0,0]
 
     # test(*numpy.multiply(2,[1,2,3]))
     # def test(a,b,c):
@@ -65,6 +65,7 @@ class Cube:
 
     def __init__(self, x, y, z):
         self.position = numpy.multiply(self.cubeDist,[x, y ,z])
+        self.cubePos = [x,y,z]
 
     def draw(self):
         glPushMatrix()
@@ -87,4 +88,11 @@ class Cube:
         glPopMatrix()
 
     def setRotate(self,direction, x, y, z):
-        self.rotate = (direction*90, x, y, z)
+        print(self.cubePos)
+        if(x == 1):
+            self.cubePos[2],self.cubePos[1] = self.cubePos[1],self.cubePos[2]
+            self.rotate = (direction*90, x, y, z)
+        #(-1,-1,1),(-1,0,-1),(-1,1,-1)
+        #(-1-1,-1),(-1,-1,0),(-1,-1,1)
+        #(-1,-1,0)
+        #(-1,0,-1)
