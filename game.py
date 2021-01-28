@@ -61,10 +61,10 @@ class Game:
 
 
         glRotatef(33, *self.getDirection()); # Changes view on key press
+        # for cube in self.cubeHandler.getX(0):
+        #     cube.setRotate(1,1,0,0) #move down
         for cube in self.cubeHandler.getY(0):
-            cube.setRotate(1,1,0,0)
-        # for cube in self.cubeHandler.getY(0):
-        #   cube.setRotate(1,1,0,0)
+          cube.setRotate(1,0,1,0) #move right
         # for cube in self.cubeHandler.getX(-1):
         #     cube.setRotate(1,1,0,0)
         #self.cubeHandler.getTestCube().setRotate(0.2,0,1,0)
