@@ -60,11 +60,14 @@ class Game:
         glTranslate(0, 0, -8) # translatie (beweeg een beetje naar achter)
 
 
+
+
         glRotatef(33, *self.getDirection()); # Changes view on key press
         # for cube in self.cubeHandler.getX(0):
         #     cube.setRotate(1,1,0,0) #move down
-        for cube in self.cubeHandler.getY(0):
-          cube.setRotate(1,0,1,0) #move right
+        if(self.getRow()):
+            for cube in self.cubeHandler.getX(0):
+              cube.setRotate(1,1,0,0) #move right
         # for cube in self.cubeHandler.getX(-1):
         #     cube.setRotate(1,1,0,0)
         #self.cubeHandler.getTestCube().setRotate(0.2,0,1,0)
@@ -88,6 +91,16 @@ class Game:
         else:
             self.keyCache = args[0]
 
+    def getRow(self):
+        if self.keyCache == b'1':
+            print("got here")
+            self.keyCache = ''
+            return 1
+        if self.keyCache == b'2':
+            print("got here")
+            self.keyCache = ''
+            return 2
+
     def getDirection(self):
 
         if(self.keyCache == ' '):
@@ -101,9 +114,6 @@ class Game:
             return (0,1,0)
         elif self.keyCache == b's':
             return (-1,0,0)
-        elif self.keyCache == b'1':
-            print(self.cubes[18].cubePos)
-            self.keyCache = ''
         return (0,0,0)
 
 Game()
