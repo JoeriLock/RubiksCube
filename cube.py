@@ -3,6 +3,8 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy
 
+from PIL import Image # voor plaatjes
+
 
 
 
@@ -69,6 +71,11 @@ class Cube:
         self.x = 0
         self.y = 0
 
+        self.check = 0
+
+    def setCheck(self, check):
+        self.check = check
+
     def draw(self):
         glPushMatrix()
         glRotate(*self.rotateX)
@@ -83,7 +90,10 @@ class Cube:
         glEnd()
 
         glBegin(GL_LINES)
-        glColor3fv((0,0,0))
+        if(self.check):
+            glColor3fv((128,128,128))
+        else:
+            glColor3fv((0,0,0))
         for edge in self.edges:
             for vertex in edge:
                 glVertex3fv(numpy.add(self.position,self.verticies[vertex]))
@@ -93,12 +103,17 @@ class Cube:
     def setRotate(self,direction, x, y, z):
         if(x == 1):
             self.x += 1
-            self.cubePos[2],self.cubePos[1] = self.cubePos[1],self.cubePos[2]
+            self.cubePos[2],self.cubePos[1] = self.cubePos[1],(self.cubePos[2]*-1)
             self.rotateX = (direction*90*self.x, x, y, z)
+            # (-1,1,1) (-1,0,1) (-1,-1,1)
+            # --- (-1,1,1) (-1,1,0) (-1,1,-1)
+            # (-1,-1,1) (-1,-1,0) (-1,-1,-1)
+            # (0,-2,0) (0,-1,-1) (0,0,-2)
         if(y == 1):
             self.y += 1
-            self.cubePos[2],self.cubePos[0] = self.cubePos[0],self.cubePos[2]
-            self.rotateY = (direction*90*self.y, x, y, z)
+            self.cubePos[2],self.cubePos[0] = self.cubePos[0],(self.cubePos[2]*-1)
+            self.rotateY = (direction*-90*self.y, x, y, z)
+        #(x,y,z) -> (z, y -x)
         #(-1,-1,1),(0,-1,1),(1,-1,1)
         #(-1-1,-1),(-1,-1,0),(-1,-1,1)
         #(-1,-1,0)
