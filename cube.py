@@ -70,7 +70,7 @@ class Cube:
         self.cubePos = [x,y,z]
         self.x = 0
         self.y = 0
-
+        self.rotationOrder = []
         self.check = 0
 
     def setCheck(self, check):
@@ -78,8 +78,13 @@ class Cube:
 
     def draw(self):
         glPushMatrix()
-        glRotate(*self.rotateX)
-        glRotate(*self.rotateY)
+
+        for axis in self.rotationOrder[::-1]:
+            if(axis == 'x'):
+                glRotate(90,1,0,0)
+            else:
+                glRotate(-90,0,1,0)
+
         glBegin(GL_QUADS)
         i = 0
         for surface in self.surfaces:
@@ -104,7 +109,8 @@ class Cube:
         if(x == 1):
             self.x += 1
             self.cubePos[2],self.cubePos[1] = self.cubePos[1],(self.cubePos[2]*-1)
-            self.rotateX = (direction*90*self.x, x, y, z)
+            self.rotationOrder.append('x')
+            #self.rotateX = (direction*90*self.x, x, y, z)
             # (-1,1,1) (-1,0,1) (-1,-1,1)
             # --- (-1,1,1) (-1,1,0) (-1,1,-1)
             # (-1,-1,1) (-1,-1,0) (-1,-1,-1)
@@ -112,9 +118,18 @@ class Cube:
         if(y == 1):
             self.y += 1
             self.cubePos[2],self.cubePos[0] = self.cubePos[0],(self.cubePos[2]*-1)
-            self.rotateY = (direction*-90*self.y, x, y, z)
+            #self.rotateY = (direction*-90*self.y, x, y, z)
+            self.rotationOrder.append('y')
         #(x,y,z) -> (z, y -x)
         #(-1,-1,1),(0,-1,1),(1,-1,1)
-        #(-1-1,-1),(-1,-1,0),(-1,-1,1)
-        #(-1,-1,0)
-        #(-1,0,-1)
+        #
+
+test = []
+test.append('y')
+test[::-1]
+# blauw
+# (-1,1,1)
+# (1,1,1)
+#Groen
+# (1,-1,-1)
+# (-d1,-1,1)
