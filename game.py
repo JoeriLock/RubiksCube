@@ -27,6 +27,9 @@ class Game:
         self.cubes = self.createCubes()
         self.keyCache = "";
         self.cubeHandler = CubeHandler(self.cubes)
+        self.cameraAngle = {"ver":0, "hor":0, "up":0, "down":0}
+        self.startTime = 0;
+        self.mouseStatus = (0,2,0,0);
         #self.cubeHanlder = CubeHandler()
         # basic config to create window
         glutInit()
@@ -42,7 +45,7 @@ class Game:
 
 
         # what to draw each frame
-        #glutDisplayFunc(self.showScreen) #init drawing
+        glutDisplayFunc(self.showScreen) #init drawing
         glutIdleFunc(self.showScreen)
         glutKeyboardFunc(self.keyPressed)
         glutMouseFunc(self.mouseAction)
@@ -58,26 +61,33 @@ class Game:
                     cubes.append(cube)
         return cubes
 
+
+
+    def updateCamera(self):
+        if(self.mouseStatus[1] == 0):
+            timeDif = glutGet(GLUT_ELAPSED_TIME) - self.startTime
+            self.cameraAngle["up"] += (self.cameraAngle["ver"] * timeDif * 0.02)
+            self.cameraAngle["down"] += (self.cameraAngle["hor"] * timeDif * 0.02)
     # Draw all that is need
     def showScreen(self):
-        phi = 0.02 * glutGet(GLUT_ELAPSED_TIME)
+        phi = 0.02 * (glutGet(GLUT_ELAPSED_TIME) - self.startTime)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear screen
         glLoadIdentity() # wis de huidige matrix
         glViewport(0, -0, 500, 500) #Draw area (x,y, width, height)
         glFrustum(-1, 1, -1.0, 1.0,1, 20) # 3d matrix warin in dingen kan neer zetten
         glTranslate(0, 0, -8) # translatie (beweeg een beetje naar achter)
+        self.updateCamera()
+        glRotatef(self.cameraAngle["down"],0,1,0);
 
 
-
-
-        glRotatef(33, *self.getDirection()); # Changes view on key press
+        glRotatef(self.cameraAngle["up"],1,0,0); # Changes view on key press
         # for cube in self.cubeHandler.getX(0):
         #     cube.setRotate(1,1,0,0) #move down
         i = self.getRow()
-        if(i == 1):
-            self.cubeHandler.getX(-1)
-        if(i == 2):
-            self.cubeHandler.getY(1)
+        if(1 <= i <= 3):
+            self.cubeHandler.getX(i-2)
+        if(4 <= i <= 6):
+            self.cubeHandler.getY(i -5)
         if(i == 9):
             self.cubeHandler.rotateSelected()
 
@@ -88,12 +98,25 @@ class Game:
 
 
 
-
     def mouseAction(self, *args):
-        print(args)
+        self.mouseStatus = args
+        self.startTime = glutGet(GLUT_ELAPSED_TIME);
+
+        if(args[2] <= 333):
+            self.cameraAngle["hor"] = 0
+        if(args[2] <= 166):
+            self.cameraAngle["hor"] += -1
+        if(args[2] > 333):
+            self.cameraAngle["hor"] = 1
+
+        if(args[3] <= 333):
+            self.cameraAngle["ver"] = 0
+        if(args[3] <= 166):
+            self.cameraAngle["ver"] = -1
+        if(args[3] > 333):
+            self.cameraAngle["ver"] = 1
 
     def keyPressed(self,*args):
-        #print(args)
         if args[0] == '\x08':
             self.keyCache = self.keyCache[:-1]
         elif args[0] == b'\x1b':
@@ -102,16 +125,12 @@ class Game:
             self.keyCache = args[0]
 
     def getRow(self):
-        if self.keyCache == b'1':
-            print('1')
+        key = self.keyCache
+        if(key.isdigit()):
             self.keyCache = ''
-            return 1
-        if self.keyCache == b'2':
-            self.keyCache = ''
-            return 2
-        if self.keyCache == b'9':
-            self.keyCache = ''
-            return 9
+            return int(key)
+
+
         return 0
 
     def getDirection(self):
