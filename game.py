@@ -41,9 +41,14 @@ class Game:
         glEnable(GL_TEXTURE_GEN_S) # zet het automatisch genereren van horizontale textuur-coordinaten aan
         glEnable(GL_TEXTURE_GEN_T)
         glEnable(GL_TEXTURE_2D) # zet textuur aan
+        glEnable(GL_LIGHTING)
+        glEnable(GL_RESCALE_NORMAL)
+        glEnable(GL_LIGHT0)
         glLineWidth(5)
-
-
+        glLight(GL_LIGHT0, GL_POSITION, [2, 4, 5])
+        glLight(GL_LIGHT0, GL_DIFFUSE, [0.5, 0.5, 0.5]) # wit licht
+        glLight(GL_LIGHT0, GL_AMBIENT, [0.5, 0.5, 0.5]) # wit licht
+        glLight(GL_LIGHT0, GL_SPECULAR, [1, 1, 1]) # wit licht
         # what to draw each frame
         glutDisplayFunc(self.showScreen) #init drawing
         glutIdleFunc(self.showScreen)
@@ -88,8 +93,10 @@ class Game:
             self.cubeHandler.getX(i-2)
         if(4 <= i <= 6):
             self.cubeHandler.getY(i -5)
+        if(i == 8):
+            self.cubeHandler.rotateSelected(1)
         if(i == 9):
-            self.cubeHandler.rotateSelected()
+            self.cubeHandler.rotateSelected(-1)
 
         for cube in self.cubes:
             cube.draw()

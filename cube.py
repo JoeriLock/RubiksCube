@@ -3,14 +3,10 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy
 
-from PIL import Image # voor plaatjes
-
-
-
 
 class Cube:
 
-    cubeDist = 2.2
+    cubeDist = 2.1
     # vertices = corners (8 tot)
     # (x, y, z)
     verticies = (
@@ -88,7 +84,9 @@ class Cube:
         glBegin(GL_QUADS)
         i = 0
         for surface in self.surfaces:
-            glColor3fv(self.colors[i])
+            glMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, [*self.colors[i], 1]) # geel materiaal, let op alpha
+            glMaterial(GL_FRONT_AND_BACK, GL_SPECULAR, [1, 1, 1]) # witte reflectie
+            glMaterial(GL_FRONT_AND_BACK, GL_SHININESS, 50) # groote van glimvlek
             i+=1
             for vertex in surface:
                 glVertex3fv(numpy.add(self.position,self.verticies[vertex]))
@@ -96,9 +94,9 @@ class Cube:
 
         glBegin(GL_LINES)
         if(self.check):
-            glColor3fv((128,128,128))
+            glMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, [1,1,1, 1]) # geel materiaal, let op alpha
         else:
-            glColor3fv((0,0,0))
+            glMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, [0,0,0,1]) # geel materiaal, let op alpha
         for edge in self.edges:
             for vertex in edge:
                 glVertex3fv(numpy.add(self.position,self.verticies[vertex]))
@@ -106,30 +104,15 @@ class Cube:
         glPopMatrix()
 
     def setRotate(self,direction, x, y, z):
-        if(x == 1):
-            self.x += 1
-            self.cubePos[2],self.cubePos[1] = self.cubePos[1],(self.cubePos[2]*-1)
+        if(x != 0):
+            self.cubePos[2],self.cubePos[1] = self.cubePos[1],(self.cubePos[2]*x)
             self.rotationOrder.append('x')
-            #self.rotateX = (direction*90*self.x, x, y, z)
-            # (-1,1,1) (-1,0,1) (-1,-1,1)
-            # --- (-1,1,1) (-1,1,0) (-1,1,-1)
-            # (-1,-1,1) (-1,-1,0) (-1,-1,-1)
-            # (0,-2,0) (0,-1,-1) (0,0,-2)
+            if(x == -1):
+                self.rotationOrder.append('x')
+                self.rotationOrder.append('x')
         if(y == 1):
-            self.y += 1
-            self.cubePos[2],self.cubePos[0] = self.cubePos[0],(self.cubePos[2]*-1)
-            #self.rotateY = (direction*-90*self.y, x, y, z)
+            self.cubePos[2],self.cubePos[0] = self.cubePos[0],(self.cubePos[2]*y)
             self.rotationOrder.append('y')
-        #(x,y,z) -> (z, y -x)
-        #(-1,-1,1),(0,-1,1),(1,-1,1)
-        #
-
-test = []
-test.append('y')
-test[::-1]
-# blauw
-# (-1,1,1)
-# (1,1,1)
-#Groen
-# (1,-1,-1)
-# (-d1,-1,1)
+            if(y == -1):
+                self.rotationOrder.append('y')
+                self.rotationOrder.append('y')

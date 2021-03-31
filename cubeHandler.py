@@ -26,15 +26,15 @@ class CubeHandler:
                 list.append(cube)
         return list
 
-    def rotateSelected(self):
+    def rotateSelected(self,dir):
         if(self.direction == 'x'):
             for cube in self.cubes:
                 if cube.check:
-                    cube.setRotate(1,1,0,0)
+                    cube.setRotate(1,dir,0,0)
         if(self.direction == 'y'):
             for cube in self.cubes:
                 if cube.check:
-                    cube.setRotate(1,0,1,0)
+                    cube.setRotate(1,0,dir,0)
 
 
 
